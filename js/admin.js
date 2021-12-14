@@ -6,14 +6,25 @@ import "./admin-animation.js";
 const orderBody = document.querySelector(".order-body");
 const sortOrder = document.querySelector("#sortOrder");
 const discardAllBtn = document.querySelector(".discardAllBtn");
+const changeCategory = document.querySelector("#change-category");
+const changeDetail = document.querySelector("#change-detail");
 
 let ordersData = [];
+const colorsArr = ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"];
 
 // C3.js
 function renderC3() {
   if (ordersData.length === 0) {
     c3.generate({
-      bindto: "#chart",
+      bindto: "#chart1",
+      data: {
+        type: "pie",
+        columns: [["目前沒有訂單", 1]],
+        colors: { 目前沒有訂單: "#888888" },
+      },
+    });
+    c3.generate({
+      bindto: "#chart2",
       data: {
         type: "pie",
         columns: [["目前沒有訂單", 1]],
@@ -21,62 +32,112 @@ function renderC3() {
       },
     });
   } else {
-    const obj = {};
-
-    // 算出某項產品總營收
-    ordersData.forEach((order) => {
-      order.products.forEach((product) => {
-        if (obj[product.title] === undefined) {
-          obj[product.title] = product.quantity * product.price;
-        } else {
-          obj[product.title] += product.quantity * product.price;
-        }
-      });
-    });
-
-    const objKeys = Object.keys(obj);
-    const objValues = Object.values(obj);
-
-    let arr = [];
-    objKeys.forEach((item, idx) => {
-      arr.push([objKeys[idx], objValues[idx]]);
-    });
-
-    // 由最大排到最小
-    arr.sort((a, b) => b[1] - a[1]);
-
-    // 分配顏色
-    const colorsArr = ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"];
-    const colors = {};
-    const arrLen = arr.length;
-
-    // 品項大於三個時，把除了營收前三高的，都歸類為「其他」
-    if (arrLen > 3) {
-      const arrSpliced = arr.splice(3);
-
-      let another = 0;
-      arrSpliced.forEach((item) => (another += item[1]));
-      arr.push(["其他", another]);
-
-      arr.forEach((item, idx) => {
-        colors[item[0]] = colorsArr[idx];
-      });
-    } else if (arrLen <= 3) {
-      arr.forEach((item, idx) => {
-        colors[item[0]] = colorsArr[idx];
-      });
-    }
-
-    c3.generate({
-      bindto: "#chart",
-      data: {
-        type: "pie",
-        columns: arr,
-        colors: colors,
-      },
-    });
+    // 全產品類別營收比重
+    showObjCategory();
   }
 }
+// 全產品類別營收比重
+function showObjCategory() {
+  changeDetail.classList.remove('active');
+  changeCategory.classList.add('active');
+
+  const objCategory = {
+    收納: 0,
+    床架: 0,
+    窗簾: 0
+  };
+  ordersData.forEach((order, i) => {
+    order.products.forEach((product) => {
+      objCategory[product.category] += product.quantity * product.price;
+    })
+  })
+
+  const objCategoryKeys = Object.keys(objCategory);
+  const objCategoryValues = Object.values(objCategory);
+  const objCategoryArr = [];
+
+  objCategoryKeys.forEach((item, idx) => {
+    objCategoryArr.push([objCategoryKeys[idx], objCategoryValues[idx]]);
+  })
+  // 營收大排到小
+  objCategoryArr.sort((a, b) => b[1] - a[1]);
+
+  const objCategoryColors = {};
+  objCategoryArr.forEach((item, idx) => {
+    objCategoryColors[item[0]] = colorsArr[idx];
+  })
+
+  c3.generate({
+    bindto: "#chart",
+    data: {
+      type: "pie",
+      columns: objCategoryArr,
+      colors: objCategoryColors
+    },
+  });
+}
+
+// 全品項營收比重
+function showObjDetail() {
+  changeCategory.classList.remove('active');
+  changeDetail.classList.add('active');
+  const objDetail = {};
+  ordersData.forEach((order) => {
+    order.products.forEach((product) => {
+      if (objDetail[product.title] === undefined) {
+        objDetail[product.title] = product.quantity * product.price;
+      } else {
+        objDetail[product.title] += product.quantity * product.price;
+      }
+    });
+  });
+
+  const objDetailKeys = Object.keys(objDetail);
+  const objDetailValues = Object.values(objDetail);
+
+  let objDetailArr = [];
+  objDetailKeys.forEach((item, idx) => {
+    objDetailArr.push([objDetailKeys[idx], objDetailValues[idx]]);
+  });
+
+  // 由最大排到最小
+  objDetailArr.sort((a, b) => b[1] - a[1]);
+
+  // 分配顏色
+  const objDetailColors = {};
+  const objDetailArrLen = objDetailArr.length;
+
+  // 品項大於三個時，把除了營收前三高的，都歸類為「其他」
+  if (objDetailArrLen > 3) {
+    const arrSpliced = objDetailArr.splice(3);
+
+    let another = 0;
+    arrSpliced.forEach((item) => (another += item[1]));
+    objDetailArr.push(["其他", another]);
+
+    objDetailArr.forEach((item, idx) => {
+      objDetailColors[item[0]] = colorsArr[idx];
+    });
+  } else if (objDetailArrLen <= 3) {
+    objDetailArr.forEach((item, idx) => {
+      objDetailColors[item[0]] = colorsArr[idx];
+    });
+  }
+
+  c3.generate({
+    bindto: "#chart",
+    data: {
+      type: "pie",
+      columns: objDetailArr,
+      colors: objDetailColors
+    },
+  });
+}
+// 切換顯示
+
+changeCategory.addEventListener('click', showObjCategory);
+changeDetail.addEventListener('click', showObjDetail);
+
 
 // 取得訂單列表
 function getOrderList() {

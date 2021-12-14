@@ -934,3 +934,21 @@ body {
 .text-center {
   text-align: center !important;
 }
+.btn-change {
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px 15px;
+  color: #000000;
+  border: 1.3px solid #000000;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  background-color: #ffffff;
+}
+.btn-change.active {
+  background-color: #6a33ff;
+  color: #ffffff;
+}
+.btn-change:active {
+  background-color: #6a33ff;
+  color: #ffffff;
+}

@@ -22,11 +22,16 @@
         </ul>
       </div>
     </nav>
+
     <section class="wrap">
-      <h2 class="section-title">全品項營收比重</h2>
-      <div id="chart">
-      </div>
+      <button type="button" class="btn-change active" id="change-category">全產品類別營收比重</button>
+      <button type="button" class="btn-change" id="change-detail">全品項營收比重</button>
+
+      <h2 class="section-title">全產品類別營收比重</h2>
+      <div id="chart"></div>
+      
     </section>
+
     <section class="wrap orderPage-list">
       <div class="d-flex justify-between">
         <select id="sortOrder" class="order-select">
@@ -34,7 +39,7 @@
           <option value="未處理">未處理的訂單</option>
           <option value="已處理">已處理的訂單</option>
         </select>
-        <button type="button" href="#" class="discardAllBtn">清除全部訂單</button>
+        <button type="button" class="discardAllBtn">清除全部訂單</button>
       </div>
       <div class="orderTableWrap">
         <table class="orderPage-table">
@@ -50,8 +55,7 @@
               <th>操作</th>
             </tr>
           </thead>
-          <tbody class="order-body">
-          </tbody>
+          <tbody class="order-body"></tbody>
         </table>
       </div>
     </section>
