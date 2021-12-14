@@ -15,17 +15,14 @@ const colorsArr = ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"];
 
 // C3.js
 function renderC3() {
+  const btnChange = document.querySelectorAll('.btn-change');
   if (ordersData.length === 0) {
-    c3.generate({
-      bindto: "#chart1",
-      data: {
-        type: "pie",
-        columns: [["目前沒有訂單", 1]],
-        colors: { 目前沒有訂單: "#888888" },
-      },
+    btnChange.forEach((item) => {
+      item.classList.add('d-none')
     });
+    sectionTitle.innerHTML = '';
     c3.generate({
-      bindto: "#chart2",
+      bindto: "#chart",
       data: {
         type: "pie",
         columns: [["目前沒有訂單", 1]],
@@ -33,6 +30,9 @@ function renderC3() {
       },
     });
   } else {
+    btnChange.forEach((item) => {
+      item.classList.remove('d-none');
+    });
     // 全產品類別營收比重
     showObjCategory();
   }

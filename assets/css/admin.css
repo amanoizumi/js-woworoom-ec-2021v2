@@ -165,10 +165,13 @@ body {
   font-size: 24px;
 }
 .d-none {
-  display: none;
+  display: none !important;
 }
 .d-block {
   display: block;
+}
+.d-inline {
+  display: inline;
 }
 
 .wrap {
