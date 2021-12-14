@@ -8,6 +8,7 @@ const sortOrder = document.querySelector("#sortOrder");
 const discardAllBtn = document.querySelector(".discardAllBtn");
 const changeCategory = document.querySelector("#change-category");
 const changeDetail = document.querySelector("#change-detail");
+const sectionTitle = document.querySelector(".section-title");
 
 let ordersData = [];
 const colorsArr = ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"];
@@ -38,6 +39,7 @@ function renderC3() {
 }
 // 全產品類別營收比重
 function showObjCategory() {
+  sectionTitle.innerHTML = '全產品類別營收比重';
   changeDetail.classList.remove('active');
   changeCategory.classList.add('active');
 
@@ -79,6 +81,7 @@ function showObjCategory() {
 
 // 全品項營收比重
 function showObjDetail() {
+  sectionTitle.innerHTML = '全品項營收比重';
   changeCategory.classList.remove('active');
   changeDetail.classList.add('active');
   const objDetail = {};
